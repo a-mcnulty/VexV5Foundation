@@ -27,14 +27,29 @@ Type a letter + **Enter** for each move. Type `.` to quit.
 
 Each builds on the last. Start at `01`, work forward.
 
+## Match project
+
+The `project/` folder is a complete match simulation that combines the examples into one structured program:
+
+```
+project/
+  robot.h    — Robot struct with driveFor, turnFor, claw methods
+  field.h    — ASCII field renderer with target tracking
+  main.cpp   — Autonomous period → driver control, like a real match
+```
+
+```
+cd project
+g++ main.cpp -o match && ./match
+```
+
+Edit `autonomous()` in `main.cpp` to write your own auto routine, then drive in the control period.
+
 ## Why it mirrors the real robot
 
 ```cpp
-// Simulator
-robot.driveFor(50);
+robot.driveFor(3);
 robot.turnFor(90);
-
-// Same code runs on a real V5
 ```
 
-Students debug logic with instant text feedback, then port proven routines to hardware.
+Same method names as VEXcode. Students debug logic with instant text feedback, then port proven routines to hardware.
