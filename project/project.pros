@@ -1,0 +1,15 @@
+{
+    "py/object": "pros.conductor.project.Project",
+    "py/state": {
+        "project_name": "VexV5",
+        "target": "v5",
+        "templates": {
+            "kernel": {
+                "name": "kernel",
+                "version": "4.1.0",
+                "target": "v5"
+            }
+        },
+        "upload_options": {}
+    }
+}

@@ -69,7 +69,7 @@ int main() {
     robot.print();
 
     char key;
-    while (cin >> key) {
+    while (cout << "Move the robot (w/a/s/d/q/e/.): " && cin >> key) {
         if      (key == 'w') robot.driveFor(10);
         else if (key == 's') robot.driveFor(-10);
         else if (key == 'a') robot.turnFor(-90);
