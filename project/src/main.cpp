@@ -49,20 +49,55 @@ void competition_initialize() {}
 
 void autonomous() {
     lcd::set_text(2, "Autonomous running");
+    Motor left_wheels (LEFT_WHEELS_PORT);
+    Motor right_wheels (RIGHT_WHEELS_PORT, true); // This reverses the motor
 
-    drive_for(127, 127, 1000);
-    drive_for(80, -80, 450);
-    drive_for(127, 127, 800);
+
+  right_wheels.move_relative(1000, MOTOR_MAX_SPEED);
+  left_wheels.move_relative(1000, MOTOR_MAX_SPEED);
 
     claw_close();
     arm_up();
 
     lcd::set_text(2, "Autonomous done");
 }
+ void turn(int amount) {
+    left_front.move_relative(amount, MOTOR_MAX_SPEED);
+    left_back.move_relative(-amount, MOTOR_MAX_SPEED);
+    right_front.move_relative(-amount, MOTOR_MAX_SPEED);
+    right_back.move_relative(amount, MOTOR_MAX_SPEED);
+}
+void forward(int amount) {
+    left_front.move_relative(amount, MOTOR_MAX_SPEED);
+    left_back.move_relative(amount, MOTOR_MAX_SPEED);
+    right_front.move_relative(amount, MOTOR_MAX_SPEED);
+    right_back.move_relative(amount, MOTOR_MAX_SPEED);
+}
+void backward(int amount) {
+    left_front.move_relative(-amount, MOTOR_MAX_SPEED);
+    left_back.move_relative(-amount, MOTOR_MAX_SPEED);
+    right_front.move_relative(-amount, MOTOR_MAX_SPEED);
+    right_back.move_relative(-amount, MOTOR_MAX_SPEED);
+}
+void square() {
+ forward(127);
+    turn(90);
+    forward(127);
+    turn(90);
+    forward(127);
+    turn(90);
+    forward(127);
+    turn(90);
+void 
 
+
+}
+ }
 void opcontrol() {
     Controller master(CONTROLLER_MASTER);
-
+   
+    return 0;
+}
     while (true) {
         int forward = master.get_analog(ANALOG_LEFT_Y);
         int turn    = master.get_analog(ANALOG_RIGHT_X);
@@ -82,6 +117,15 @@ void opcontrol() {
             claw_motor.move(-50);
         else
             claw_motor.move(0);
+
+        if (master.get_digital(DIGITAL_A))
+            square();
+            turn(90);
+            forward(127);
+            turn(90);
+            backward(127);
+            turn(90);
+            
 
         delay(20);
     }
