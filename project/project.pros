@@ -5,11 +5,17 @@
         "target": "v5",
         "templates": {
             "kernel": {
-                "name": "kernel",
-                "version": "4.1.0",
-                "target": "v5"
+                "py/object": "pros.conductor.templates.local_template.LocalTemplate",
+                "py/state": {
+                    "name": "kernel",
+                    "version": "4.1.0",
+                    "target": "v5",
+                    "supported_kernels": null,
+                    "metadata": {}
+                }
             }
         },
+        "output": "bin/output.bin",
         "upload_options": {}
     }
 }

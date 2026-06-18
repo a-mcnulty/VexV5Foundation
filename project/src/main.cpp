@@ -1,20 +1,29 @@
 #include "main.h"
 
-// ---- Motors ----
+using namespace pros;
+using namespace pros::v5;
+using namespace pros::c;
+
+// --- Motor ports (change these to match your robot) ---
+constexpr int LEFT_FRONT_PORT  = 1;
+constexpr int LEFT_BACK_PORT   = 2;
+constexpr int RIGHT_FRONT_PORT = 9;
+constexpr int RIGHT_BACK_PORT  = 10;
+constexpr int ARM_PORT         = 5;
+constexpr int CLAW_PORT        = 7;
+
 Motor left_front (LEFT_FRONT_PORT);
 Motor left_back  (LEFT_BACK_PORT);
-Motor right_front(RIGHT_FRONT_PORT,  true);   // reversed
-Motor right_back (RIGHT_BACK_PORT,   true);   // reversed
+Motor right_front(RIGHT_FRONT_PORT);
+Motor right_back (RIGHT_BACK_PORT);
 Motor arm_motor  (ARM_PORT);
 Motor claw_motor (CLAW_PORT);
-
-// ---- Drive helpers ----
 
 void drive(int left, int right) {
     left_front .move(left);
     left_back  .move(left);
-    right_front.move(right);
-    right_back .move(right);
+    right_front.move(-right);
+    right_back .move(-right);
 }
 
 void drive_for(int left, int right, int ms) {
@@ -29,8 +38,6 @@ void arm_down() { arm_motor.move(-60); delay(500); arm_motor.move(0);  }
 void claw_open()  { claw_motor.move(50);  delay(400); claw_motor.move(0); }
 void claw_close() { claw_motor.move(-50); delay(400); claw_motor.move(0); }
 
-// ---- Competition callbacks ----
-
 void initialize() {
     lcd::initialize();
     lcd::set_text(1, "Robot initialized");
@@ -43,16 +50,10 @@ void competition_initialize() {}
 void autonomous() {
     lcd::set_text(2, "Autonomous running");
 
-    // Drive forward
     drive_for(127, 127, 1000);
-
-    // Turn right ~90 degrees
     drive_for(80, -80, 450);
-
-    // Drive forward again
     drive_for(127, 127, 800);
 
-    // Pick up game piece
     claw_close();
     arm_up();
 
@@ -63,21 +64,18 @@ void opcontrol() {
     Controller master(CONTROLLER_MASTER);
 
     while (true) {
-        // Arcade drive: left stick Y = forward/back, right stick X = turn
         int forward = master.get_analog(ANALOG_LEFT_Y);
         int turn    = master.get_analog(ANALOG_RIGHT_X);
 
         drive(forward + turn, forward - turn);
 
-        // R1 / R2 = arm up / down
         if (master.get_digital(DIGITAL_R1))
             arm_motor.move(80);
         else if (master.get_digital(DIGITAL_R2))
             arm_motor.move(-60);
         else
-            arm_motor.move(10);   // hold torque
+            arm_motor.move(10);
 
-        // L1 / L2 = claw open / close
         if (master.get_digital(DIGITAL_L1))
             claw_motor.move(50);
         else if (master.get_digital(DIGITAL_L2))
