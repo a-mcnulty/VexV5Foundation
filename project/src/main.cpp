@@ -28,15 +28,14 @@ void drive(int left, int right) {
 
 void drive_for(int left, int right, int ms) {
     drive(left, right);
-    delay(ms);
     drive(0, 0);
 }
 
-void arm_up()   { arm_motor.move(80);  delay(600); arm_motor.move(10); }
-void arm_down() { arm_motor.move(-60); delay(500); arm_motor.move(0);  }
+void arm_up()   { arm_motor.move(80); arm_motor.move(10); }
+void arm_down() { arm_motor.move(-60); arm_motor.move(0);  }
 
-void claw_open()  { claw_motor.move(50);  delay(400); claw_motor.move(0); }
-void claw_close() { claw_motor.move(-50); delay(400); claw_motor.move(0); }
+void claw_open()  { claw_motor.move(50); claw_motor.move(0); }
+void claw_close() { claw_motor.move(-50); claw_motor.move(0); }
 
 void initialize() {
     lcd::initialize();
@@ -49,8 +48,8 @@ void competition_initialize() {}
 
 void autonomous() {
     lcd::set_text(2, "Autonomous running");
-    Motor left_wheels (LEFT_WHEELS_PORT);
-    Motor right_wheels (RIGHT_WHEELS_PORT, true); // This reverses the motor
+    Motor left_wheels (LEFT_FRONT_PORT);
+    Motor right_wheels (RIGHT_FRONT_PORT, true); // This reverses the motor
 
 
   right_wheels.move_relative(1000, MOTOR_MAX_SPEED);
