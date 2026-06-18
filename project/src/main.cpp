@@ -60,22 +60,33 @@ void autonomous() {
     lcd::set_text(2, "Autonomous done");
 }
 
+void turn(int amount) {
+    left_front.move(amount);
+    left_back.move(amount);
+    right_front.move(-amount);
+    right_back.move(-amount);
+}
+
 void opcontrol() {
     Controller master(CONTROLLER_MASTER);
+    pros::Optical sensor(6);
 
     while (true) {
+        // Arcade drive: left stick Y = forward/back, right stick X = turn
         int forward = master.get_analog(ANALOG_LEFT_Y);
         int turn    = master.get_analog(ANALOG_RIGHT_X);
 
         drive(forward + turn, forward - turn);
 
+        // R1 / R2 = arm up / down
         if (master.get_digital(DIGITAL_R1))
             arm_motor.move(80);
         else if (master.get_digital(DIGITAL_R2))
             arm_motor.move(-60);
         else
-            arm_motor.move(10);
+            arm_motor.move(10);   // hold torque
 
+        // L1 / L2 = claw open / close
         if (master.get_digital(DIGITAL_L1))
             claw_motor.move(50);
         else if (master.get_digital(DIGITAL_L2))
@@ -83,6 +94,35 @@ void opcontrol() {
         else
             claw_motor.move(0);
 
+
+        if (master.get_digital(DIGITAL_R2))
+            arm_motor.move(60);
+            if(sensor.get_proximity() > 10) 
+                claw_motor.move(50);
+                arm_motor.move(-60);
+        
+        if (master.get_digital(DIGITAL_A)) {
+            left_front.move(50);
+            right_front.move(50);
+            left_back.move(50);
+            right_back.move(50);
+        }
+        if (master.get_digital(DIGITAL_B)) {
+            turn(50);
+            turn(50);
+        }
+        if (master.get_digital(DIGITAL_X)) {
+            left_front.move(-50);
+            right_front.move(-50);
+            left_back.move(-50);
+            right_back.move(-50);
+        }
         delay(20);
+    }   if (master.get_digital(DIGITAL_Y)) {
+        left_front.move(50);
+        right_front.move(50);
+        left_back.move(-50);
+        right_back.move(-50);
     }
 }
+        
