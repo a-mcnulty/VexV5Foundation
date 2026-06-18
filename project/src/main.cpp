@@ -46,6 +46,20 @@ void initialize() {
 void disabled() {}
 
 void competition_initialize() {}
+
+
+void wheels_move(double amount) {
+    left_front.move_relative(amount, 100);
+    right_front.move_relative(amount, 100);
+    left_back.move_relative(amount, 100);
+    right_back.move_relative(amount, 100);
+}
+void right_turn(double degrees) {
+    left_front.move_relative (degrees, 100);
+    left_back.move_relative (degrees, 100);
+    right_front.move_relative (-degrees, 100);
+    right_back.move_relative (-degrees, 100); }
+
 void opcontrol() {
     Controller master(CONTROLLER_MASTER);
 
@@ -64,17 +78,6 @@ void opcontrol() {
         if (master.get_digital(DIGITAL_L1)) claw_motor.move(50);
         else if (master.get_digital(DIGITAL_L2)) claw_motor.move(-50);
         else claw_motor.move(0);
-        void wheels_move(double amount) {
-            left_front.move_relative(amount, 100);
-            right_front.move_relative(amount, 100);
-            left_back.move_relative(amount, 100);
-            right_back.move_relative(amount, 100);
-        }
-        void right_turn(double degrees) {
-            left_front.move (degrees, 100);
-            left_back.move (degrees, 100);
-            right_front.move (-degrees, 100);
-            right_back.move (-degrees, 100); }
         if (master.get_digital(DIGITAL_A)) {
             //do dance
             for (int i = 1; i < 5; i++) {
@@ -86,11 +89,11 @@ void opcontrol() {
                 right_turn(70.0);
             }
             for (int c = 0; c < 5; c++) {
-                wheels_move(35.0)
-                right_turn(144.0)
+                wheels_move(35.0);
+                right_turn(144.0);
             for (int v = 0; v < 10; v++) {
-                wheels_move(3.)
-                wheels_move(-3.0)
+                wheels_move(3.);
+                wheels_move(-3.0);
             }
 }
         
