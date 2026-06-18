@@ -46,20 +46,6 @@ void initialize() {
 void disabled() {}
 
 void competition_initialize() {}
-
-void autonomous() {
-    lcd::set_text(2, "Autonomous running");
-
-    drive_for(127, 127, 1000);
-    drive_for(80, -80, 450);
-    drive_for(127, 127, 800);
-
-    claw_close();
-    arm_up();
-
-    lcd::set_text(2, "Autonomous done");
-}
-
 void opcontrol() {
     Controller master(CONTROLLER_MASTER);
 
@@ -73,15 +59,44 @@ void opcontrol() {
             arm_motor.move(80);
         else if (master.get_digital(DIGITAL_R2))
             arm_motor.move(-60);
-        else
-            arm_motor.move(10);
+        else arm_motor.move(10);
 
-        if (master.get_digital(DIGITAL_L1))
-            claw_motor.move(50);
-        else if (master.get_digital(DIGITAL_L2))
-            claw_motor.move(-50);
-        else
-            claw_motor.move(0);
+        if (master.get_digital(DIGITAL_L1)) claw_motor.move(50);
+        else if (master.get_digital(DIGITAL_L2)) claw_motor.move(-50);
+        else claw_motor.move(0);
+        void wheels_move(double amount) {
+            left_front.move_relative(amount, 100);
+            right_front.move_relative(amount, 100);
+            left_back.move_relative(amount, 100);
+            right_back.move_relative(amount, 100);
+        }
+        void right_turn(double degrees) {
+            left_front.move (degrees, 100);
+            left_back.move (degrees, 100);
+            right_front.move (-degrees, 100);
+            right_back.move (-degrees, 100); }
+        if (master.get_digital(DIGITAL_A)) {
+            //do dance
+            for (int i = 1; i < 5; i++) {
+                wheels_move(90.0);
+                right_turn(30.0);
+            }
+            for (int a = 1; a < 7; a++) {
+                wheels_move(90.0);
+                right_turn(70.0);
+            }
+            for (int c = 0; c < 5; c++) {
+                wheels_move(35.0)
+                right_turn(144.0)
+            for (int v = 0; v < 10; v++) {
+                wheels_move(3.)
+                wheels_move(-3.0)
+            }
+}
+        
+
+
+        }
 
         delay(20);
     }
